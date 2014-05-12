@@ -348,3 +348,44 @@ class TestArray(unittest.TestCase):
             }
         result = uni.check(spec, self.checkable)
         self.assertFalse(result, True)
+
+
+class TestPathEval(unittest.TestCase):
+
+    checkable = {
+        'type': str,
+        'cow': {
+            'size': 'extrabig',
+            },
+        'types': [str, unicode, object],
+        }
+
+    def test_getattr(self):
+        spec  = {'type.__name__': 'str'}
+        result = uni.check(spec, self.checkable)
+        self.assertTrue(result, True)
+
+    def test_getattr_false(self):
+        spec  = {'type.__name__': {'$ne': 'list'}}
+        result = uni.check(spec, self.checkable)
+        self.assertTrue(result, True)
+
+    def test_getitem(self):
+        spec  = {'cow.size': 'extrabig'}
+        result = uni.check(spec, self.checkable)
+        self.assertTrue(result, True)
+
+    def test_getitem_false(self):
+        spec  = {'cow.size': {'$ne': 'tiny'}}
+        result = uni.check(spec, self.checkable)
+        self.assertTrue(result, True)
+
+    def test_index_getattr(self):
+        spec  = {'types.1.__name__': 'unicode'}
+        result = uni.check(spec, self.checkable)
+        self.assertTrue(result, True)
+
+    def test_index_getattr_false(self):
+        spec  = {'types.1.__name__': {'$ne': 'dict'}}
+        result = uni.check(spec, self.checkable)
+        self.assertTrue(result, True)

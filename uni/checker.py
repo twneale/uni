@@ -8,7 +8,7 @@ class UnhandledOperatorError(Exception):
     pass
 
 
-class InvalidKeypath(Exception):
+class InvalidPath(Exception):
     pass
 
 
@@ -16,32 +16,30 @@ class SpecChecker(dispatcher.Mixin):
     '''Is testing for minimal pattern matching, so should
     evaluate lazily and bail.
     '''
-
     # -----------------------------------------------------------------------
     # Top-level checking functions.
     # -----------------------------------------------------------------------
-    def path_getitem(self, obj, keypath):
+    InvalidPath = InvalidPath
+
+    def path_eval(self, obj, keypath):
         segs = keypath.split('.')
         this = obj
         for seg in segs:
             if isinstance(this, dict):
-                this = this[seg]
-                continue
-            if isinstance(this, (list, tuple)):
+                if seg in this:
+                    this = this[seg]
+            elif isinstance(this, (list, tuple)):
                 if seg.isdigit():
                     this = this[int(seg)]
-                else:
-                    msg = '''
-                        Got invalid segment %r in keypath %r for
-                       type %r in object %r.'''
-                    msg = re.sub(r'\s+', ' ', msg)
-                    args = (seg, keypath, type(this), this)
-                    raise InvalidKeypath(msg % args)
-                continue
+            else:
+                try:
+                    this = getattr(this, seg)
+                except AttributeError:
+                    raise self.InvalidPath()
         return this
 
     def check(self, spec, data):
-        path_getitem = self.path_getitem
+        path_eval = self.path_eval
         for keypath, specvalue in spec.items():
             if keypath.startswith('$'):
                 optext = keypath
@@ -49,7 +47,12 @@ class SpecChecker(dispatcher.Mixin):
                 args = (optext, specvalue, checkable)
                 generator = self.dispatch_operator(*args)
             else:
-                checkable = path_getitem(data, keypath)
+                try:
+                    checkable = path_eval(data, keypath)
+                except self.InvalidPath:
+                    # The spec referenced an item or attribute that
+                    # doesn't exist. Fail!
+                    return False
                 generator = self.dispatch_literal(specvalue, checkable)
             for result in generator:
                 if not result:
