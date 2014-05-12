@@ -357,7 +357,7 @@ class TestPathEval(unittest.TestCase):
         'cow': {
             'size': 'extrabig',
             },
-        'types': [str, unicode, object],
+        'types': [str, object],
         }
 
     def test_getattr(self):
@@ -381,7 +381,7 @@ class TestPathEval(unittest.TestCase):
         self.assertTrue(result, True)
 
     def test_index_getattr(self):
-        spec  = {'types.1.__name__': 'unicode'}
+        spec  = {'types.0.__name__': 'str'}
         result = uni.check(spec, self.checkable)
         self.assertTrue(result, True)
 

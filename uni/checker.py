@@ -1,7 +1,8 @@
 import re
+import types
 import operator
 
-import dispatcher
+from nmmd import TypeDispatcher, DispatchError
 
 
 class UnhandledOperatorError(Exception):
@@ -12,10 +13,19 @@ class InvalidPath(Exception):
     pass
 
 
-class SpecChecker(dispatcher.Mixin):
+class Dispatcher(TypeDispatcher):
+
+    def prepare(self):
+        return dict(self.registry)
+
+
+class SpecChecker:
     '''Is testing for minimal pattern matching, so should
     evaluate lazily and bail.
     '''
+    dispatcher = Dispatcher()
+    gentype = types.GeneratorType
+
     # -----------------------------------------------------------------------
     # Top-level checking functions.
     # -----------------------------------------------------------------------
@@ -26,8 +36,10 @@ class SpecChecker(dispatcher.Mixin):
         this = obj
         for seg in segs:
             if isinstance(this, dict):
-                if seg in this:
+                try:
                     this = this[seg]
+                except KeyError:
+                    raise self.InvalidPath()
             elif isinstance(this, (list, tuple)):
                 if seg.isdigit():
                     this = this[int(seg)]
@@ -62,7 +74,8 @@ class SpecChecker(dispatcher.Mixin):
     # -----------------------------------------------------------------------
     # Functions for evaluating query literals.
     # -----------------------------------------------------------------------
-    dispatch_literal = dispatcher.Mixin.dispatch
+    def dispatch_literal(self, *args, **kwargs):
+        return self.dispatcher.dispatch(*args, **kwargs)
 
     def handle_literal(self, val, checkable):
         '''This one's tricky...check for equality,
@@ -79,7 +92,7 @@ class SpecChecker(dispatcher.Mixin):
                 pass
         yield False
 
-    handle_basestring = handle_bool = handle_literal
+    handle_str = handle_bool = handle_literal
     handle_int = handle_float = handle_long = handle_literal
     handle_NoneType = handle_literal
 
@@ -128,10 +141,9 @@ class SpecChecker(dispatcher.Mixin):
 
         # Fall back to class-level double-dispatch.
         optext = optext.lstrip('$')
-        try:
-            method = self.dispatch_data[optext]
-        except KeyError:
-            raise self.DispatchError('No method found: %r' % spec)
+        method = getattr(self, 'handle_' + optext, None)
+        if method is None:
+            raise DispatchError('No method found: %r' % spec)
         results = method(spec, checkable)
         if isinstance(results, self.gentype):
             for result in results:
