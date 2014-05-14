@@ -156,8 +156,7 @@ class SpecChecker:
             raise DispatchError('No method found: %r' % spec)
         results = method(spec, checkable)
         if isinstance(results, self.gentype):
-            for result in results:
-                yield result
+            yield from results
             return
         else:
             yield results
