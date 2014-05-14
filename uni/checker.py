@@ -135,7 +135,7 @@ class SpecChecker:
         '$gt': operator.gt,
         '$lt': operator.lt,
         '$lte': operator.le,
-        '$ne': lambda a, b: a != b,
+        '$ne': operator.ne,
         '$nin': lambda item, array: item not in array,
         '$all': lambda a, b: set(b).issubset(set(a)),
     }
