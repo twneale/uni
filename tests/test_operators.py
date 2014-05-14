@@ -315,14 +315,14 @@ class TestEvaluation(unittest.TestCase):
         result = uni.check(spec, self.checkable)
         self.assertTrue(result, True)
 
-    def test_type_false(self):
+    def test_exists_false(self):
         spec  = {
-            'uni.age': {
+            'uni.cow': {
                 '$exists': False,
                 }
             }
         result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert result is False
 
 
 class TestArray(unittest.TestCase):
