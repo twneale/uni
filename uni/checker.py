@@ -21,7 +21,11 @@ class Dispatcher(TypeDispatcher):
 
 class SpecChecker:
     '''Is testing for minimal pattern matching, so should
-    evaluate lazily and bail.
+    evaluate lazily and bail. I.e., this code won't be able to report all
+    matches or match failures after a match attempt; to do that would entail
+    some changes, but they wouldn't be too difficult, because the
+    nmmd.Dispatcher is explicitly designed to accommodate dispatching to
+    multiple handler functions.
     '''
     dispatcher = Dispatcher()
     gentype = types.GeneratorType
@@ -32,6 +36,9 @@ class SpecChecker:
     InvalidPath = InvalidPath
 
     def path_eval(self, obj, keypath):
+        '''Given an object and a mongo-style dotted key path, return the
+        object value referenced by that key path.
+        '''
         segs = keypath.split('.')
         this = obj
         for seg in segs:
@@ -51,6 +58,9 @@ class SpecChecker:
         return this
 
     def check(self, spec, data):
+        '''Given a mongo-style spec and some data or python object,
+        check whether the object complies with the spec. Fails eagerly.
+        '''
         path_eval = self.path_eval
         for keypath, specvalue in spec.items():
             if keypath.startswith('$'):
@@ -81,9 +91,11 @@ class SpecChecker:
         '''This one's tricky...check for equality,
         then for contains.
         '''
+        # I.e., spec: {'x': 1}, data: {'x': 1}
         if val == checkable:
             yield True
             return
+        # I.e., spec: {'x': 1}, data: {'x': [1, 2, 3]}
         else:
             try:
                 yield val in checkable
