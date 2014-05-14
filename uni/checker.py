@@ -113,11 +113,9 @@ class SpecChecker:
             if key.startswith('$'):
                 optext = key
                 args = (optext, query, checkable)
-                for result in self.dispatch_operator(*args):
-                    yield result
+                yield from self.dispatch_operator(*args)
             else:
-                result = self.check({key: query}, checkable)
-                yield result
+                yield self.check({key: query}, checkable)
 
     def handle_list(self, listy, checkable):
         yield listy == checkable
