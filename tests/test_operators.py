@@ -1,9 +1,9 @@
-import unittest
+from nose.tools import raises
 
 import uni
 
 
-class TestComparison(unittest.TestCase):
+class TestComparison:
 
     checkable = {
         'species': 't-rex',
@@ -18,8 +18,7 @@ class TestComparison(unittest.TestCase):
                 '$in': ['cow', 'pig', 't-rex']
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result)
+        assert uni.check(spec, self.checkable)
 
     def test_in_false(self):
         spec  = {
@@ -27,8 +26,7 @@ class TestComparison(unittest.TestCase):
                 '$in': ['cow', 'pig']
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result)
+        assert not uni.check(spec, self.checkable)
 
     def test_nin(self):
         spec  = {
@@ -36,8 +34,7 @@ class TestComparison(unittest.TestCase):
                 '$nin': ['cow', 'pig', 'bunny']
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_nin_false(self):
         spec  = {
@@ -45,8 +42,7 @@ class TestComparison(unittest.TestCase):
                 '$nin': ['cow', 'pig', 't-rex']
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
     def test_gte_eq(self):
         spec  = {
@@ -56,8 +52,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result)
+        assert uni.check(spec, self.checkable)
 
     def test_gte_gt(self) :
         spec  = {
@@ -67,8 +62,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result)
+        assert uni.check(spec, self.checkable)
 
     def test_gte_false(self):
         spec  = {
@@ -78,8 +72,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result)
+        assert not uni.check(spec, self.checkable)
 
     def test_gt(self):
         spec  = {
@@ -89,8 +82,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_gt_false(self):
         spec  = {
@@ -100,8 +92,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
     def test_lte_eq(self):
         spec  = {
@@ -111,8 +102,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_lte_lt(self):
         spec  = {
@@ -122,8 +112,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_lte_false(self):
         spec  = {
@@ -133,8 +122,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
     def test_lt(self):
         spec  = {
@@ -144,8 +132,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_lt_false(self):
         spec  = {
@@ -155,8 +142,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
     def test_ne(self):
         spec  = {
@@ -166,8 +152,7 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_ne_false(self):
         spec  = {
@@ -177,11 +162,10 @@ class TestComparison(unittest.TestCase):
                     }
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
 
-class TestLogical(unittest.TestCase):
+class TestLogical:
 
     checkable = {
         'species': 't-rex',
@@ -203,8 +187,7 @@ class TestLogical(unittest.TestCase):
                     },
                 ]
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_or_false(self):
         spec  = {
@@ -215,8 +198,7 @@ class TestLogical(unittest.TestCase):
                     },
                 ]
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
     def test_any(self):
         spec  = {
@@ -229,8 +211,7 @@ class TestLogical(unittest.TestCase):
                 {'info.unicorns_that_exist': 'cowcorn'},
                 ]
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_any_false(self):
         spec  = {
@@ -243,8 +224,7 @@ class TestLogical(unittest.TestCase):
                 {'info.unicorns_that_exist': 'cowcorn'},
                 ]
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
     def test_and(self):
         spec  = {
@@ -257,8 +237,7 @@ class TestLogical(unittest.TestCase):
                 {'info.unicorns_that_exist': 'uni'},
                 ]
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_and_false(self):
         spec  = {
@@ -271,11 +250,10 @@ class TestLogical(unittest.TestCase):
                 {'info.unicorns_that_exist': 'cowcorn'},
                 ]
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
 
-class TestEvaluation(unittest.TestCase):
+class TestEvaluation:
 
     checkable = {
         'species': 't-rex',
@@ -294,8 +272,7 @@ class TestEvaluation(unittest.TestCase):
                 '$type': 'int'
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_type_false(self):
         spec  = {
@@ -303,8 +280,7 @@ class TestEvaluation(unittest.TestCase):
                 '$type': 'unicode'
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
     def test_exists(self):
         spec  = {
@@ -312,8 +288,7 @@ class TestEvaluation(unittest.TestCase):
                 '$exists': True,
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_exists_false(self):
         spec  = {
@@ -321,11 +296,17 @@ class TestEvaluation(unittest.TestCase):
                 '$exists': False,
                 }
             }
-        result = uni.check(spec, self.checkable)
-        assert result is False
+        assert uni.check(spec, self.checkable)
+
+    @raises(uni.InvalidQuery)
+    def test_exists_false(self):
+        spec  = {
+            '$exists': 'uni.cow',
+            }
+        assert uni.check(spec, self.checkable)
 
 
-class TestArray(unittest.TestCase):
+class TestArray:
 
     checkable = {
         'species': range(10),
@@ -337,8 +318,7 @@ class TestArray(unittest.TestCase):
                 '$all': [1, 2, 3],
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_all_false(self):
         spec  = {
@@ -346,11 +326,10 @@ class TestArray(unittest.TestCase):
                 '$all': ['cow', 2, 3],
                 }
             }
-        result = uni.check(spec, self.checkable)
-        self.assertFalse(result, True)
+        assert not uni.check(spec, self.checkable)
 
 
-class TestPathEval(unittest.TestCase):
+class TestPathEval:
 
     checkable = {
         'type': str,
@@ -362,30 +341,24 @@ class TestPathEval(unittest.TestCase):
 
     def test_getattr(self):
         spec  = {'type.__name__': 'str'}
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_getattr_false(self):
         spec  = {'type.__name__': {'$ne': 'list'}}
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_getitem(self):
         spec  = {'cow.size': 'extrabig'}
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_getitem_false(self):
         spec  = {'cow.size': {'$ne': 'tiny'}}
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_index_getattr(self):
         spec  = {'types.0.__name__': 'str'}
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
 
     def test_index_getattr_false(self):
         spec  = {'types.1.__name__': {'$ne': 'dict'}}
-        result = uni.check(spec, self.checkable)
-        self.assertTrue(result, True)
+        assert uni.check(spec, self.checkable)
