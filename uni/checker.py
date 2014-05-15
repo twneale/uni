@@ -13,6 +13,11 @@ class InvalidPath(Exception):
     pass
 
 
+class InvalidQuery(Exception):
+    '''Raised if query is wrong.
+    '''
+
+
 class Dispatcher(TypeDispatcher):
 
     def prepare(self):
@@ -224,6 +229,9 @@ class SpecChecker:
         the key doesn't exist, we return False, because that
         can't be true.
         '''
+        if not isinstance(spec, bool):
+            msg = 'The argument of an exists query must be of type bool.'
+            raise InvalidQuery(msg)
         return spec
 
 
