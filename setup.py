@@ -14,7 +14,7 @@ setup(name='uni',
       long_description=long_description,
       platforms=['any'],
       install_requires=[
-          'dispatcher',
+          'nmmd',
       ],
       classifiers=["Development Status :: 4 - Beta",
                    "Intended Audience :: Developers",
