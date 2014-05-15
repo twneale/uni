@@ -15,5 +15,11 @@ setup(name='uni',
       platforms=['any'],
       install_requires=[
           'dispatcher',
-      ]
+      ],
+      classifiers=["Development Status :: 4 - Beta",
+                   "Intended Audience :: Developers",
+                   "License :: OSI Approved :: BSD License",
+                   "Natural Language :: English",
+                   "Operating System :: OS Independent",
+                   "Programming Language :: Python :: 3.4"]
 )
