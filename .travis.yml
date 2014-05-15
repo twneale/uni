@@ -2,8 +2,8 @@ language: python
 python:
     - "3.3"
     - "3.4"
-install: pip install -r requirements-test.txt --use-mirrors
-script: ./run-tests.sh
+install: pip install -r tests/requirements-test.txt --use-mirrors
+script: ./tests/run-tests.sh
 after_success:
     - coveralls
 notifications:
