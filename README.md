@@ -5,8 +5,8 @@ Test mongo-style queries on arbitrary python objects
 
 [![Build Status](https://travis-ci.org/twneale/uni.svg?branch=master)](https://travis-ci.org/twneale/uni)
 [![Coverage Status](https://coveralls.io/repos/twneale/uni/badge.png?branch=master)](https://coveralls.io/r/twneale/uni?branch=master)
-[![Latest Version](https://pypip.in/version/twneale/badge.png)](https://pypi.python.org/pypi/twneale/)
-[![Download Format](https://pypip.in/format/twneale/badge.png)](https://pypi.python.org/pypi/twneale/)
+[![Latest Version](https://pypip.in/version/twneale/uni/badge.png)](https://pypi.python.org/pypi/twneale/)
+[![Download Format](https://pypip.in/format/twneale/uni/badge.png)](https://pypi.python.org/pypi/twneale/)
 
     import uni
 
