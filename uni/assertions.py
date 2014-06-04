@@ -13,7 +13,7 @@ class MatchSet:
     self.check_all completes. Optionally raise failure or return self.success.
     '''
     def __init__(self, querylist=None, raise_failure=False):
-        self.querylist = list(querylist or self.querylist)
+        self.querylist = list(querylist or getattr(self, 'querylist', []))
         self.success = None
         self.raise_failure = raise_failure
 
