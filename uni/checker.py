@@ -109,9 +109,7 @@ class SpecChecker:
                 pass
         yield False
 
-    handle_str = handle_bool = handle_literal
-    handle_int = handle_float = handle_long = handle_literal
-    handle_NoneType = handle_literal
+    generic_handler = handle_literal
 
     def handle_dict(self, dicty, checkable):
         for key, query in dicty.items():
